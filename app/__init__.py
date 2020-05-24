@@ -1,8 +1,10 @@
 from flask import Flask, render_template
 from flask_sqlalchemy import SQLAlchemy
+from flask_login import LoginManager
 from config import config
 
 db = SQLAlchemy()
+login_manager = LoginManager()
 
 
 def create_app(config_name):
@@ -11,5 +13,9 @@ def create_app(config_name):
     config[config_name].init_app(app)
 
     db.init_app(app)
+
+    login_manager.init_app(app)
+    login_manager.login_message = 'You must be logged in to access this page.'
+    login_manager.login_view = 'auth.login'
 
     return app
