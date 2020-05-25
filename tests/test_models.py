@@ -26,3 +26,7 @@ class TestUserModel(unittest.TestCase):
     def test_is_admin_default_false(self):
         self.assertFalse(self.u.is_admin)
         self.assertTrue(self.u2.is_admin)
+
+
+class TestProductSellerCategoryModels(unittest.TestCase):
+    pass
