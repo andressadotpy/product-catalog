@@ -1,5 +1,5 @@
 import unittest
-from app.models import User
+from app.models import User, Product, Seller, Category
 
 
 class TestUserModel(unittest.TestCase):
@@ -26,7 +26,3 @@ class TestUserModel(unittest.TestCase):
     def test_is_admin_default_false(self):
         self.assertFalse(self.u.is_admin)
         self.assertTrue(self.u2.is_admin)
-
-
-class TestProductSellerCategoryModels(unittest.TestCase):
-    pass
