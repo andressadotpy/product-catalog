@@ -35,9 +35,9 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-association_table = db.Table('association', Base.metadata,
-    db.Column('products_id', db.Integer, db.ForeignKey('products.id')),
-    db.Column('sellers_id', db.Integer, db.ForeignKey('sellers.id'))
+association_table = db.Table('association',
+    db.Column('product_id', db.Integer, db.ForeignKey('products.id')),
+    db.Column('seller_id', db.Integer, db.ForeignKey('sellers.id'))
 )
 
 
@@ -47,9 +47,8 @@ class Product(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(60), index=True)
-    sellers_id = db.relationship('Seller', secondary=association_table)
-    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
-    categories = db.relationship('Category', back_populates='products')
+    sellers = db.relationship('Seller', secondary=association_table, backref=db.backref('products', lazy='dynamic'), lazy='dynamic')
+    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
 
     def __repr__(self):
         return f'{self.product_name}'
@@ -75,7 +74,7 @@ class Category(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(60), index=True)
-    products = db.relationship('Product', back_populates='category')
+    products = db.relationship('Product', backref='category', lazy=True)
 
     def __repr__(self):
         return f'{self.category_name}'
