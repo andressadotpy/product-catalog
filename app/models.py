@@ -48,7 +48,7 @@ class Product(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     product_name = db.Column(db.String(60), index=True)
     sellers = db.relationship('Seller', secondary=association_table, backref=db.backref('products', lazy='dynamic'), lazy='dynamic')
-    category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
+    category_id = db.Column(db.Integer, db.ForeignKey('categories.id'))
 
     def __repr__(self):
         return f'{self.product_name}'
@@ -70,7 +70,7 @@ class Seller(db.Model):
 
 class Category(db.Model):
 
-    __table__name = 'categories'
+    __tablename__ = 'categories'
 
     id = db.Column(db.Integer, primary_key=True)
     category_name = db.Column(db.String(60), index=True)
