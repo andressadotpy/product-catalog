@@ -10,3 +10,9 @@ class SellerForm(FlaskForm):
     seller_phone = StringField('Phone', validators=[DataRequired()])
     seller_site = StringField('Site')
     submit = SubmitField('Submit')
+
+
+class CategoryForm(FlaskForm):
+    """Form for admin user add or edit a category for the products."""
+    category = StringField('Category name', validators=[DataRequired()])
+    submit = SubmitField('Submit')

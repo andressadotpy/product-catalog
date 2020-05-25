@@ -3,9 +3,9 @@ from flask_login import current_user, login_required
 
 
 from . import admin
-from .forms import SellerForm
+from .forms import SellerForm, CategoryForm
 from .. import db
-from ..models import Seller
+from ..models import Seller, Category, Product
 
 
 def check_admin():
@@ -64,3 +64,51 @@ def delete_seller(id):
     db.session.commit()
     flash('The seller was deleted.')
     return redirect(url_for('admin.show_all_sellers'))
+
+
+#### CRUD FOR CATEGORY ####
+
+@admin.route('/categories', methods=['GET', 'POST'])
+@login_required
+def show_all_categories():
+    categories = Category.query.all()
+    return render_template('admin/categories/categories.html')
+
+
+@admin.route('/categories/add', methods=['GET', 'POST'])
+@login_required
+def add_new_category():
+    check_admin()
+    form = CategoryForm()
+    if form.validate_on_submit():
+        category = Category(category_name=form.category.data)
+        try:
+            db.session.add(category)
+            db.session.commit()
+            flash('You have successfully added a new category.')
+        except:
+            flash('Error: this category is already saved.')
+        return redirect(url_for('admin.show_all_categories'))
+
+
+@admin.route('/categories/edit/<int:id>', methods=['GET', 'POST'])
+@login_required
+def edit_categories(id):
+    check_admin()
+    category = Category.query.get_or_404(id)
+    form = CategoryForm(obj=category)
+    if form.validate_on_submit():
+        category_name = form.category.data
+        flash('You have successfully edited a category.')
+        return redirect(url_for('admin.show_all_categories'))
+        
+
+@admin.route('/categories/delete/<int:id>', methods=['GET', 'POST'])
+@login_required
+def delete_category(id):
+    check_admin()
+    category = Category.query.get_or_404(id)
+    db.session.delete(category)
+    db.session.commit()
+    flash('The category was deleted.')
+    return redirect(url_for('admin.show_all_categories'))
