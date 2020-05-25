@@ -1,4 +1,7 @@
 from werkzeug.security import generate_password_hash, check_password_hash
+from sqlalchemy.ext.declarative import declarative_base
+
+Base = declarative_base()
 
 from app import db, login_manager
 
@@ -32,7 +35,7 @@ def load_user(user_id):
     return User.query.get(int(user_id))
 
 
-association_table = db.Table('association', db.metadata,
+association_table = db.Table('association', Base.metadata,
     db.Column('products_id', db.Integer, db.ForeignKey('products.id')),
     db.Column('sellers_id', db.Integer, db.ForeignKey('sellers.id'))
 )
